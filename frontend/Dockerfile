@@ -7,10 +7,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安装依赖
-RUN npm ci --only=production
+RUN npm ci
 
 # 复制源代码
 COPY . .
+
+# 创建构建输出目录
+RUN mkdir -p dist/assets
 
 # 构建应用
 RUN npm run build

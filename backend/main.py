@@ -35,59 +35,59 @@ backtest_engine: BacktestEngine = None
 async def lifespan(app: FastAPI):
     """应用生命周期管理"""
     global market_service, strategy_engine, backtest_engine
-    
+
     # 启动时初始化
     logger.info("🚀 Starting CryptoQuantBot...")
-    
+
     try:
         # 初始化数据库
         await init_database()
         logger.info("✅ Database initialized")
-        
+
         # 初始化市场数据服务
         market_service = MarketDataService()
         await market_service.initialize()
         logger.info("✅ Market data service initialized")
-        
+
         # 初始化策略引擎
         strategy_engine = StrategyEngine()
         await strategy_engine.initialize(market_service)
         logger.info("✅ Strategy engine initialized")
-        
+
         # 初始化回测引擎
         backtest_engine = BacktestEngine()
         await backtest_engine.initialize(market_service, strategy_engine)
         logger.info("✅ Backtest engine initialized")
-        
+
         # 启动实时数据更新
         await market_service.start_real_time_data()
         logger.info("✅ Real-time data updates started")
-        
+
         # 启动WebSocket管理器
         websocket_manager.is_running = True
         logger.info("✅ WebSocket manager started")
-        
+
         logger.info("🎉 CryptoQuantBot started successfully!")
-        
+
         yield
-        
+
     except Exception as e:
         logger.error(f"❌ Failed to start application: {e}")
         raise
-    
+
     # 关闭时清理
     logger.info("🛑 Shutting down CryptoQuantBot...")
-    
+
     try:
         # 关闭服务
         if market_service:
             await market_service.close()
-        
+
         # 关闭WebSocket连接
         await websocket_manager.close_all()
-        
+
         logger.info("✅ CryptoQuantBot shutdown complete")
-        
+
     except Exception as e:
         logger.error(f"❌ Error during shutdown: {e}")
 
@@ -122,16 +122,16 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         # 从查询参数获取客户端ID
         client_id = websocket.query_params.get('client_id')
-        
+
         await websocket_manager.connect(websocket, client_id)
         logger.info(f"WebSocket client connected: {client_id}")
-        
+
         while True:
             try:
                 # 接收客户端消息
                 message = await websocket.receive_text()
                 await websocket_manager.handle_message(websocket, message)
-                
+
             except WebSocketDisconnect:
                 logger.info(f"WebSocket client disconnected: {client_id}")
                 break
@@ -141,7 +141,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     'type': 'error',
                     'message': str(e)
                 }, websocket)
-                
+
     except Exception as e:
         logger.error(f"WebSocket connection error: {e}")
     finally:
@@ -152,7 +152,7 @@ async def websocket_endpoint(websocket: WebSocket):
 async def health_check():
     """健康检查"""
     settings = get_settings()
-    
+
     return {
         "message": "CryptoQuantBot API is running",
         "version": "1.0.0",
@@ -185,7 +185,7 @@ async def websocket_status():
 async def system_status():
     """获取系统状态"""
     global market_service, strategy_engine, backtest_engine
-    
+
     return {
         "system": {
             "status": "running",
@@ -214,10 +214,12 @@ except RuntimeError:
 
 if __name__ == "__main__":
     settings = get_settings()
-    
-    logger.info(f"Starting server in {settings.binance_api_mode} mode")
+    from app.core.config import detect_api_mode
+
+    api_mode = detect_api_mode()
+    logger.info(f"Starting server in {api_mode} mode")
     logger.info(f"Supported symbols: {settings.binance_symbols}")
-    
+
     uvicorn.run(
         "main:app",
         host="0.0.0.0",

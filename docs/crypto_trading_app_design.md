@@ -138,15 +138,15 @@ def generate_buy_signal(data):
     macd_bullish = data['macd'] > data['macd_signal'] and data['macd_prev'] <= data['macd_signal_prev']
     rsi_oversold = data['rsi'] < 30
     bb_support = data['close'] <= data['bb_lower']
-    
+
     return macd_bullish and (rsi_oversold or bb_support)
 
-# 卖出信号条件  
+# 卖出信号条件
 def generate_sell_signal(data):
     macd_bearish = data['macd'] < data['macd_signal'] and data['macd_prev'] >= data['macd_signal_prev']
     rsi_overbought = data['rsi'] > 70
     bb_resistance = data['close'] >= data['bb_upper']
-    
+
     return macd_bearish and (rsi_overbought or bb_resistance)
 ```
 
@@ -524,5 +524,3 @@ strategies:
 ## 总结
 
 本设计方案提供了一个完整的加密货币量化交易应用架构，涵盖了从技术选型到部署策略的各个方面。该方案支持跨平台部署，具备完整的回测功能和实时交易能力，能够满足量化交易的基本需求。
-
-请您审核此设计方案，如有任何修改建议或补充要求，我将及时调整并开始编码实现。

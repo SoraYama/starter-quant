@@ -4,12 +4,12 @@
  */
 
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { 
-  ApiResponse, 
-  KLineData, 
-  SignalData, 
-  StrategyConfig, 
-  BacktestResult, 
+import {
+  ApiResponse,
+  KLineData,
+  SignalData,
+  StrategyConfig,
+  BacktestResult,
   BacktestRequest,
   AccountInfo,
   OrderRequest,
@@ -98,6 +98,11 @@ class ApiService {
 
     // 获取实时价格
     getTicker: async (symbol: string): Promise<ApiResponse<TickerData>> => {
+      return this.request('GET', `/market/ticker/${symbol}`);
+    },
+
+    // 获取价格（别名方法）
+    getPrice: async (symbol: string): Promise<ApiResponse<TickerData>> => {
       return this.request('GET', `/market/ticker/${symbol}`);
     },
 

@@ -8,17 +8,23 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y \
+# 更换为国内镜像源并安装系统依赖
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's/security.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources && \
+    apt-get update && apt-get install -y \
     gcc \
     g++ \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制依赖文件
 COPY requirements.txt .
 
-# 安装Python依赖
-RUN pip install --no-cache-dir -r requirements.txt
+# 升级pip并安装Python依赖
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir --timeout=300 --retries=5 \
+    -i https://pypi.org/simple/ \
+    -r requirements.txt
 
 # 复制应用代码
 COPY . .

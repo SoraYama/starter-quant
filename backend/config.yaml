@@ -22,16 +22,25 @@ binance:
   public_data_only: true
   base_url: "https://api.binance.com"
   testnet_url: "https://testnet.binance.vision"
-  
+
   # Supported trading pairs
   symbols: ["BTCUSDT", "ETHUSDT"]
-  
+
   # Default timeframe for analysis
   default_interval: "4h"
-  
+
   # Rate limiting
   requests_per_minute: 1200
   max_connections: 5
+
+# Proxy Configuration
+proxy:
+  # 代理服务器URL，支持HTTP和SOCKS代理
+  # 示例:
+  # url: "http://127.0.0.1:7890"  # HTTP代理
+  # url: "socks5://127.0.0.1:1080"  # SOCKS5代理
+  # url: "socks4://127.0.0.1:1080"  # SOCKS4代理
+  url: ""
 
 # Trading Configuration
 trading:
@@ -39,7 +48,7 @@ trading:
   max_position_size: 0.1
   stop_loss_percent: 2.0
   take_profit_percent: 4.0
-  
+
   # Risk management
   max_daily_loss: 5.0
   max_consecutive_losses: 3
@@ -52,13 +61,13 @@ strategies:
     fast_period: 12
     slow_period: 26
     signal_period: 9
-    
-  # RSI Configuration  
+
+  # RSI Configuration
   rsi:
     period: 14
     oversold: 30
     overbought: 70
-    
+
   # Bollinger Bands Configuration
   bollinger_bands:
     period: 20
@@ -69,7 +78,7 @@ backtest:
   initial_balance: 10000.0
   commission: 0.001  # 0.1%
   slippage: 0.001    # 0.1%
-  
+
   # Data range for backtesting (2 years)
   max_history_days: 730
 
