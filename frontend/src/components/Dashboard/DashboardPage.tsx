@@ -49,10 +49,10 @@ const DashboardPage: React.FC = () => {
     refetchInterval: 300000, // 5分钟刷新
   });
 
-  const btcPrice = priceData?.[0]?.data?.price || 0;
-  const ethPrice = priceData?.[1]?.data?.price || 0;
-  const btcChange = priceData?.[0]?.data?.price_change_percent || 0;
-  const ethChange = priceData?.[1]?.data?.price_change_percent || 0;
+  const btcPrice = parseFloat(priceData?.[0]?.data?.price || '0');
+  const ethPrice = parseFloat(priceData?.[1]?.data?.price || '0');
+  const btcChange = parseFloat(priceData?.[0]?.data?.price_change_percent || '0');
+  const ethChange = parseFloat(priceData?.[1]?.data?.price_change_percent || '0');
 
   // 最新信号信息
   const latestSignal = signalData?.data?.signals?.[0];
@@ -214,7 +214,7 @@ const DashboardPage: React.FC = () => {
                   <Space direction="vertical" style={{ width: '100%' }}>
                     <div>
                       <span style={{ color: '#666' }}>价格: </span>
-                      <strong>${latestSignal.price.toFixed(2)}</strong>
+                      <strong>${parseFloat(latestSignal.price || '0').toFixed(2)}</strong>
                     </div>
                     <div>
                       <span style={{ color: '#666' }}>置信度: </span>

@@ -66,12 +66,14 @@ const MarketPage: React.FC = () => {
   const currentPrice = realtimePrice || tickerData?.data;
   
   // 格式化价格变化
-  const formatPriceChange = (change: number, changePercent: number) => {
-    const isPositive = change >= 0;
+  const formatPriceChange = (change: number | string, changePercent: number | string) => {
+    const numChange = typeof change === 'string' ? parseFloat(change) : change;
+    const numChangePercent = typeof changePercent === 'string' ? parseFloat(changePercent) : changePercent;
+    const isPositive = numChange >= 0;
     return {
       icon: isPositive ? <ArrowUpOutlined /> : <ArrowDownOutlined />,
       color: isPositive ? '#52c41a' : '#ff4d4f',
-      text: `${isPositive ? '+' : ''}${change.toFixed(2)} (${isPositive ? '+' : ''}${changePercent.toFixed(2)}%)`,
+      text: `${isPositive ? '+' : ''}${numChange.toFixed(2)} (${isPositive ? '+' : ''}${numChangePercent.toFixed(2)}%)`,
     };
   };
 
@@ -132,7 +134,7 @@ const MarketPage: React.FC = () => {
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Statistic
                     title="当前价格"
-                    value={currentPrice.price}
+                    value={parseFloat(currentPrice.price || '0')}
                     precision={2}
                     prefix="$"
                     valueStyle={{ fontSize: 24 }}
@@ -161,7 +163,7 @@ const MarketPage: React.FC = () => {
                     <Col span={12}>
                       <Statistic
                         title="24小时最高"
-                        value={currentPrice.high_price}
+                        value={parseFloat(currentPrice.high_price || '0')}
                         precision={2}
                         prefix="$"
                       />
@@ -169,7 +171,7 @@ const MarketPage: React.FC = () => {
                     <Col span={12}>
                       <Statistic
                         title="24小时最低"
-                        value={currentPrice.low_price}
+                        value={parseFloat(currentPrice.low_price || '0')}
                         precision={2}
                         prefix="$"
                       />
@@ -178,7 +180,7 @@ const MarketPage: React.FC = () => {
                   
                   <Statistic
                     title="24小时成交量"
-                    value={currentPrice.volume}
+                    value={parseFloat(currentPrice.volume || '0')}
                     precision={2}
                     suffix={selectedSymbol.replace('USDT', '')}
                   />

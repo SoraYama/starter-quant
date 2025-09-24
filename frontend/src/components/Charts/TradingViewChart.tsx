@@ -114,26 +114,46 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     if (!candlestickSeriesRef.current || !chartRef.current) return;
 
     try {
-      // 转换K线数据
-      const candlestickData = data.map(item => ({
-        time: Math.floor(item.open_time / 1000) as any,
-        open: item.open_price,
-        high: item.high_price,
-        low: item.low_price,
-        close: item.close_price,
-      }));
+      // 转换K线数据，确保时间格式正确
+      const candlestickData = data
+        .filter(item => item.open_time && !isNaN(item.open_time))
+        .map(item => {
+          // 确保时间戳是有效的数字
+          const timestamp = typeof item.open_time === 'number' ? item.open_time : parseInt(item.open_time);
+          return {
+            time: Math.floor(timestamp / 1000) as any,
+            open: parseFloat(item.open_price) || 0,
+            high: parseFloat(item.high_price) || 0,
+            low: parseFloat(item.low_price) || 0,
+            close: parseFloat(item.close_price) || 0,
+          };
+        })
+        .filter(item => item.time > 0); // 过滤掉无效的时间戳
+
+      if (candlestickData.length === 0) {
+        console.warn('No valid chart data available');
+        return;
+      }
 
       candlestickSeriesRef.current.setData(candlestickData);
 
       // 设置成交量数据
       if (showVolume && volumeSeriesRef.current) {
-        const volumeData = data.map(item => ({
-          time: Math.floor(item.open_time / 1000) as any,
-          value: item.volume,
-          color: item.close_price >= item.open_price ? '#26a69a' : '#ef5350',
-        }));
+        const volumeData = data
+          .filter(item => item.open_time && !isNaN(item.open_time))
+          .map(item => {
+            const timestamp = typeof item.open_time === 'number' ? item.open_time : parseInt(item.open_time);
+            return {
+              time: Math.floor(timestamp / 1000) as any,
+              value: parseFloat(item.volume) || 0,
+              color: parseFloat(item.close_price) >= parseFloat(item.open_price) ? '#26a69a' : '#ef5350',
+            };
+          })
+          .filter(item => item.time > 0);
 
-        volumeSeriesRef.current.setData(volumeData);
+        if (volumeData.length > 0) {
+          volumeSeriesRef.current.setData(volumeData);
+        }
       }
 
       // 自动调整视图范围

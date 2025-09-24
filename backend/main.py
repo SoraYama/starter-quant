@@ -151,20 +151,22 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.get("/")
 async def health_check():
     """健康检查"""
+    from app.core.config import detect_api_mode
     settings = get_settings()
+    api_mode = detect_api_mode()
 
     return {
         "message": "CryptoQuantBot API is running",
         "version": "1.0.0",
         "status": "healthy",
-        "api_mode": settings.binance_api_mode,
+        "api_mode": api_mode,
         "supported_symbols": settings.binance_symbols,
         "default_interval": settings.binance_default_interval,
         "features": {
             "market_data": True,
             "strategy_analysis": True,
             "backtesting": True,
-            "trading": settings.binance_api_mode == "FULL_MODE",
+            "trading": api_mode == "FULL_MODE",
             "real_time_data": True,
             "websocket": True
         }

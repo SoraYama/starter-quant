@@ -45,8 +45,9 @@ async def get_backtest_engine() -> BacktestEngine:
     """获取回测引擎依赖"""
     global backtest_engine
     if backtest_engine is None:
+        # 创建新的回测引擎实例
         backtest_engine = BacktestEngine()
-        # 初始化依赖服务
+        # 创建并初始化依赖服务
         market_service = MarketDataService()
         strategy_engine = StrategyEngine()
         await market_service.initialize()

@@ -28,7 +28,8 @@ class WebSocketService {
     }
 
     this.isConnecting = true;
-    const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`;
+    // 直接连接到后端 WebSocket 服务
+    const wsUrl = 'ws://localhost:8000/ws';
     
     console.log('Connecting to WebSocket:', wsUrl);
 

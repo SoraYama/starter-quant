@@ -221,7 +221,7 @@ const StrategyPage: React.FC = () => {
                       {strengthData.data.latest_signal.signal_type === 'BUY' ? '买入' : '卖出'}
                     </Tag>
                     <span style={{ marginLeft: 8 }}>
-                      ${strengthData.data.latest_signal.price.toFixed(2)}
+                      ${parseFloat(strengthData.data.latest_signal.price || '0').toFixed(2)}
                     </span>
                   </div>
                 )}

@@ -22,8 +22,9 @@ async def get_strategy_engine() -> StrategyEngine:
     """获取策略引擎依赖"""
     global strategy_engine
     if strategy_engine is None:
+        # 创建新的策略引擎实例
         strategy_engine = StrategyEngine()
-        # 初始化市场数据服务
+        # 创建并初始化市场数据服务
         market_service = MarketDataService()
         await market_service.initialize()
         await strategy_engine.initialize(market_service)

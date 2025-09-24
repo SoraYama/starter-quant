@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Form, InputNumber, Button, List, Tag, notification } from 'antd';
+import { Card, Form, InputNumber, Button, List, Tag, Space, App } from 'antd';
 import { PlusOutlined, DeleteOutlined, BellOutlined } from '@ant-design/icons';
 
 interface PriceAlertProps {
@@ -17,6 +17,7 @@ interface Alert {
 const PriceAlert: React.FC<PriceAlertProps> = ({ symbol, currentPrice }) => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [form] = Form.useForm();
+  const { notification } = App.useApp();
 
   const addAlert = (values: { price: number; type: 'above' | 'below' }) => {
     const newAlert: Alert = {
@@ -95,24 +96,22 @@ const PriceAlert: React.FC<PriceAlertProps> = ({ symbol, currentPrice }) => {
           initialValue="above"
           rules={[{ required: true }]}
         >
-          <div>
-            <Button.Group style={{ width: '100%' }}>
-              <Button 
-                style={{ width: '50%' }} 
-                onClick={() => form.setFieldValue('type', 'above')}
-                type={form.getFieldValue('type') === 'above' ? 'primary' : 'default'}
-              >
-                价格上涨至
-              </Button>
-              <Button 
-                style={{ width: '50%' }} 
-                onClick={() => form.setFieldValue('type', 'below')}
-                type={form.getFieldValue('type') === 'below' ? 'primary' : 'default'}
-              >
-                价格下跌至
-              </Button>
-            </Button.Group>
-          </div>
+          <Space.Compact style={{ width: '100%' }}>
+            <Button 
+              style={{ width: '50%' }} 
+              onClick={() => form.setFieldValue('type', 'above')}
+              type={form.getFieldValue('type') === 'above' ? 'primary' : 'default'}
+            >
+              价格上涨至
+            </Button>
+            <Button 
+              style={{ width: '50%' }} 
+              onClick={() => form.setFieldValue('type', 'below')}
+              type={form.getFieldValue('type') === 'below' ? 'primary' : 'default'}
+            >
+              价格下跌至
+            </Button>
+          </Space.Compact>
         </Form.Item>
 
         <Form.Item>
@@ -125,7 +124,7 @@ const PriceAlert: React.FC<PriceAlertProps> = ({ symbol, currentPrice }) => {
       {currentPrice && (
         <div style={{ marginBottom: 16, padding: 8, background: '#f5f5f5', borderRadius: 4 }}>
           <small style={{ color: '#666' }}>
-            当前价格: <strong>${currentPrice.toFixed(2)}</strong>
+            当前价格: <strong>${parseFloat(currentPrice || '0').toFixed(2)}</strong>
           </small>
         </div>
       )}
@@ -151,7 +150,7 @@ const PriceAlert: React.FC<PriceAlertProps> = ({ symbol, currentPrice }) => {
                 {alert.type === 'above' ? '↗ 涨至' : '↘ 跌至'}
               </Tag>
               <span style={{ marginLeft: 8, fontWeight: 'bold' }}>
-                ${alert.price.toFixed(2)}
+                ${parseFloat(alert.price || '0').toFixed(2)}
               </span>
               <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>
                 {alert.created.toLocaleString()}

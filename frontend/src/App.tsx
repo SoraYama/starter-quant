@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout, ConfigProvider, theme, notification } from 'antd';
+import { Layout, ConfigProvider, theme, App as AntdApp } from 'antd';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -47,19 +47,8 @@ const App: React.FC = () => {
     // 监听连接状态
     const handleConnectionChange = (connected: boolean) => {
       setWsConnected(connected);
-      if (connected) {
-        notification.success({
-          message: '实时数据连接成功',
-          description: '已建立WebSocket连接，将接收实时市场数据',
-          duration: 3,
-        });
-      } else {
-        notification.warning({
-          message: '实时数据连接断开',
-          description: '尝试重新连接中...',
-          duration: 5,
-        });
-      }
+      // 注意：这里不再使用静态 notification，而是在组件内部处理
+      console.log('WebSocket connection status:', connected ? 'connected' : 'disconnected');
     };
 
     websocketService.onConnectionChange(handleConnectionChange);
@@ -86,40 +75,42 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider theme={themeConfig}>
-        <Router>
-          <Layout style={{ minHeight: '100vh' }}>
-            {/* 侧边栏 */}
-            <Sidebar 
-              collapsed={collapsed} 
-              theme={isDarkMode ? 'dark' : 'light'}
-            />
-            
-            <Layout>
-              {/* 顶部导航 */}
-              <Header
-                collapsed={collapsed}
-                onCollapse={() => setCollapsed(!collapsed)}
+        <AntdApp>
+          <Router>
+            <Layout style={{ minHeight: '100vh' }}>
+              {/* 侧边栏 */}
+              <Sidebar 
+                collapsed={collapsed} 
                 theme={isDarkMode ? 'dark' : 'light'}
-                onThemeToggle={toggleTheme}
-                isConnected={wsConnected}
               />
               
-              {/* 主内容区域 */}
-              <Content className="main-content">
-                <Routes>
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                  <Route path="/dashboard" element={<DashboardPage />} />
-                  <Route path="/market" element={<MarketPage />} />
-                  <Route path="/strategy" element={<StrategyPage />} />
-                  <Route path="/backtest" element={<BacktestPage />} />
-                  <Route path="/trading" element={<TradingPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="*" element={<Navigate to="/dashboard" replace />} />
-                </Routes>
-              </Content>
+              <Layout>
+                {/* 顶部导航 */}
+                <Header
+                  collapsed={collapsed}
+                  onCollapse={() => setCollapsed(!collapsed)}
+                  theme={isDarkMode ? 'dark' : 'light'}
+                  onThemeToggle={toggleTheme}
+                  isConnected={wsConnected}
+                />
+                
+                {/* 主内容区域 */}
+                <Content className="main-content">
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/market" element={<MarketPage />} />
+                    <Route path="/strategy" element={<StrategyPage />} />
+                    <Route path="/backtest" element={<BacktestPage />} />
+                    <Route path="/trading" element={<TradingPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  </Routes>
+                </Content>
+              </Layout>
             </Layout>
-          </Layout>
-        </Router>
+          </Router>
+        </AntdApp>
       </ConfigProvider>
       
       {/* React Query DevTools (仅在开发环境显示) */}
