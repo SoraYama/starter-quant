@@ -1,0 +1,251 @@
+/* 全局样式 */
+.app-layout {
+  min-height: 100vh;
+}
+
+.site-layout {
+  margin-left: 200px;
+  transition: margin-left 0.2s;
+}
+
+.site-layout.collapsed {
+  margin-left: 80px;
+}
+
+.site-layout-content {
+  padding: 16px;
+  background: #f0f2f5;
+  min-height: calc(100vh - 64px);
+}
+
+/* 暗色主题下的背景 */
+[data-theme='dark'] .site-layout-content {
+  background: #141414;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .site-layout {
+    margin-left: 0;
+  }
+  
+  .site-layout-content {
+    padding: 8px;
+  }
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+/* 错误状态 */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #ff4d4f;
+}
+
+/* 卡片样式 */
+.dashboard-card {
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .dashboard-card {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* 图表容器 */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: white;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+[data-theme='dark'] .chart-container {
+  background: #1f1f1f;
+}
+
+/* 状态指示器 */
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-indicator.connected {
+  background-color: #52c41a;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.disconnected {
+  background-color: #ff4d4f;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(82, 196, 26, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0);
+  }
+}
+
+/* 统计数字 */
+.statistic-value {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.statistic-suffix {
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+/* 交易信号 */
+.signal-buy {
+  color: #52c41a;
+  font-weight: bold;
+}
+
+.signal-sell {
+  color: #ff4d4f;
+  font-weight: bold;
+}
+
+.signal-neutral {
+  color: #faad14;
+  font-weight: bold;
+}
+
+/* 价格变化 */
+.price-up {
+  color: #52c41a;
+}
+
+.price-down {
+  color: #ff4d4f;
+}
+
+.price-unchanged {
+  color: #8c8c8c;
+}
+
+/* 工具栏 */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .toolbar {
+  background: #1f1f1f;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 表格样式 */
+.data-table {
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .data-table {
+  background: #1f1f1f;
+}
+
+/* 表单样式 */
+.form-container {
+  background: white;
+  padding: 24px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .form-container {
+  background: #1f1f1f;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* 移动端适配 */
+@media (max-width: 576px) {
+  .toolbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .chart-container {
+    height: 300px;
+    padding: 8px;
+  }
+  
+  .statistic-value {
+    font-size: 18px;
+  }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: #2f2f2f;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}

@@ -1,0 +1,78 @@
+# CryptoQuantBot Backend Dependencies
+# 核心框架
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# 数据库
+sqlalchemy==2.0.23
+alembic==1.13.1
+aiosqlite==0.19.0
+
+# Redis缓存
+redis==5.0.1
+aioredis==2.0.1
+
+# HTTP客户端
+httpx==0.25.2
+aiohttp==3.9.1
+requests==2.31.0
+
+# 数据处理和分析
+pandas==2.1.4
+numpy==1.24.4
+scipy==1.11.4
+ta-lib==0.4.28
+matplotlib==3.8.2
+plotly==5.17.0
+
+# 时间处理
+python-dateutil==2.8.2
+pytz==2023.3
+
+# 验证和序列化
+pydantic==2.5.2
+pydantic-settings==2.1.0
+
+# 加密和安全
+cryptography==41.0.8
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# 配置管理
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# 日志
+loguru==0.7.2
+
+# 工具库
+click==8.1.7
+rich==13.7.0
+typer==0.9.0
+
+# WebSocket
+websockets==12.0
+
+# 币安API
+python-binance==1.0.19
+
+# 异步支持
+asyncio-mqtt==0.16.1
+aiocron==1.8
+
+# 开发工具
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+mypy==1.7.1
+
+# 监控和性能
+prometheus-client==0.19.0
+psutil==5.9.6
+memory-profiler==0.61.0
+
+# API文档
+python-markdown==3.5.1

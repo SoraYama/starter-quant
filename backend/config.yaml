@@ -1,0 +1,81 @@
+# CryptoQuantBot Configuration
+
+app:
+  name: "CryptoQuantBot"
+  version: "1.0.0"
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+  cors_origins: ["http://localhost:3000", "http://127.0.0.1:3000"]
+
+# Database Configuration
+database:
+  sqlite_path: "./data/trading.db"
+  redis_url: "redis://localhost:6379"
+
+# Binance API Configuration
+binance:
+  # Public data mode (no API keys required)
+  api_key: ""
+  api_secret: ""
+  testnet: false
+  public_data_only: true
+  base_url: "https://api.binance.com"
+  testnet_url: "https://testnet.binance.vision"
+  
+  # Supported trading pairs
+  symbols: ["BTCUSDT", "ETHUSDT"]
+  
+  # Default timeframe for analysis
+  default_interval: "4h"
+  
+  # Rate limiting
+  requests_per_minute: 1200
+  max_connections: 5
+
+# Trading Configuration
+trading:
+  default_symbol: "BTCUSDT"
+  max_position_size: 0.1
+  stop_loss_percent: 2.0
+  take_profit_percent: 4.0
+  
+  # Risk management
+  max_daily_loss: 5.0
+  max_consecutive_losses: 3
+  min_trade_interval: 300  # seconds
+
+# Strategy Configuration
+strategies:
+  # MACD Configuration
+  macd:
+    fast_period: 12
+    slow_period: 26
+    signal_period: 9
+    
+  # RSI Configuration  
+  rsi:
+    period: 14
+    oversold: 30
+    overbought: 70
+    
+  # Bollinger Bands Configuration
+  bollinger_bands:
+    period: 20
+    std_dev: 2.0
+
+# Backtest Configuration
+backtest:
+  initial_balance: 10000.0
+  commission: 0.001  # 0.1%
+  slippage: 0.001    # 0.1%
+  
+  # Data range for backtesting (2 years)
+  max_history_days: 730
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  file: "./data/app.log"
+  max_size: "10MB"
+  backup_count: 5
