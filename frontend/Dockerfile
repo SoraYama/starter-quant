@@ -15,8 +15,8 @@ COPY . .
 # 创建构建输出目录
 RUN mkdir -p dist/assets
 
-# 构建应用
-RUN npm run build
+# 构建应用 (增加Node.js内存限制)
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 # 生产环境镜像
 FROM nginx:alpine
@@ -28,7 +28,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # 暴露端口
-EXPOSE 80
+EXPOSE 3000
 
 # 启动nginx
 CMD ["nginx", "-g", "daemon off;"]

@@ -7,16 +7,15 @@ import os
 import logging
 from typing import AsyncGenerator
 from sqlalchemy import create_engine, text
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 from .config import get_settings
 
 logger = logging.getLogger(__name__)
 
-class Base(DeclarativeBase):
-    """数据库模型基类"""
-    pass
+Base = declarative_base()
 
 # 全局数据库引擎和会话
 engine = None
@@ -47,7 +46,7 @@ async def init_database():
     )
 
     # 创建会话工厂
-    async_session_maker = async_sessionmaker(
+    async_session_maker = sessionmaker(
         engine,
         class_=AsyncSession,
         expire_on_commit=False

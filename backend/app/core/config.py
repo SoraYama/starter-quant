@@ -6,10 +6,10 @@ Configuration management for CryptoQuantBot
 import os
 from functools import lru_cache
 from typing import List, Optional
-from pydantic_settings import BaseSettings
+from pydantic import BaseModel
 import yaml
 
-class Settings(BaseSettings):
+class Settings(BaseModel):
     """应用配置"""
 
     # App Settings
@@ -61,9 +61,6 @@ class Settings(BaseSettings):
     backtest_slippage: float = 0.001
     backtest_max_history_days: int = 730
 
-    class Config:
-        env_prefix = "CRYPTO_"
-        case_sensitive = False
 
 def load_config_from_yaml(config_path: str = "config.yaml") -> dict:
     """从YAML文件加载配置"""

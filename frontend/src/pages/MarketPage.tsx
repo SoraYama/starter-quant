@@ -64,7 +64,7 @@ const MarketPage: React.FC = () => {
 
   // 获取当前价格数据（优先使用实时数据）
   const currentPrice = realtimePrice || tickerData?.data;
-  
+
   // 格式化价格变化
   const formatPriceChange = (change: number | string, changePercent: number | string) => {
     const numChange = typeof change === 'string' ? parseFloat(change) : change;
@@ -103,7 +103,7 @@ const MarketPage: React.FC = () => {
               <Option value="BTCUSDT">BTC/USDT</Option>
               <Option value="ETHUSDT">ETH/USDT</Option>
             </Select>
-            
+
             <Select
               value={selectedInterval}
               onChange={handleIntervalChange}
@@ -115,7 +115,7 @@ const MarketPage: React.FC = () => {
             </Select>
           </Space>
         </div>
-        
+
         <div className="toolbar-right">
           {websocketService.isConnected() ? (
             <Tag color="green">实时连接</Tag>
@@ -128,7 +128,7 @@ const MarketPage: React.FC = () => {
       <Row gutter={[16, 16]}>
         {/* 价格统计 */}
         <Col xs={24} lg={8}>
-          <Card title="价格统计" className="dashboard-card">
+          <Card title="价格统计" className="market-card">
             <Spin spinning={tickerLoading && !currentPrice}>
               {currentPrice ? (
                 <Space direction="vertical" style={{ width: '100%' }}>
@@ -139,7 +139,7 @@ const MarketPage: React.FC = () => {
                     prefix="$"
                     valueStyle={{ fontSize: 24 }}
                   />
-                  
+
                   {currentPrice.price_change !== undefined && (
                     <div>
                       {(() => {
@@ -158,7 +158,7 @@ const MarketPage: React.FC = () => {
                       })()}
                     </div>
                   )}
-                  
+
                   <Row gutter={16}>
                     <Col span={12}>
                       <Statistic
@@ -177,7 +177,7 @@ const MarketPage: React.FC = () => {
                       />
                     </Col>
                   </Row>
-                  
+
                   <Statistic
                     title="24小时成交量"
                     value={parseFloat(currentPrice.volume || '0')}
@@ -196,19 +196,23 @@ const MarketPage: React.FC = () => {
 
         {/* 市场概览 */}
         <Col xs={24} lg={8}>
-          <MarketOverview />
+          <div className="market-card">
+            <MarketOverview />
+          </div>
         </Col>
 
         {/* 价格提醒 */}
         <Col xs={24} lg={8}>
-          <PriceAlert symbol={selectedSymbol} currentPrice={currentPrice?.price} />
+          <div className="market-card">
+            <PriceAlert symbol={selectedSymbol} currentPrice={currentPrice?.price} />
+          </div>
         </Col>
       </Row>
 
       {/* K线图表 */}
       <Row gutter={16} style={{ marginTop: 16 }}>
         <Col xs={24}>
-          <Card title={`${selectedSymbol} K线图表`} className="dashboard-card">
+          <Card title={`${selectedSymbol} K线图表`} className="market-card">
             <Spin spinning={klineLoading}>
               {klineData?.data ? (
                 <TradingViewChart

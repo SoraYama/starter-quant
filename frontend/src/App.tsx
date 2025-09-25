@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout, ConfigProvider, theme, App as AntdApp } from 'antd';
+import { ConfigProvider, theme, App as AntdApp } from 'antd';
+import { ProLayout } from '@ant-design/pro-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -12,16 +13,10 @@ import BacktestPage from '@/pages/BacktestPage';
 import TradingPage from '@/pages/TradingPage';
 import SettingsPage from '@/pages/SettingsPage';
 
-// 布局组件
-import Header from '@/components/Layout/Header';
-import Sidebar from '@/components/Layout/Sidebar';
-
 // 服务
 import { websocketService } from '@/services/websocket';
 
 import './App.css';
-
-const { Content } = Layout;
 
 // 创建QueryClient实例
 const queryClient = new QueryClient({
@@ -47,7 +42,6 @@ const App: React.FC = () => {
     // 监听连接状态
     const handleConnectionChange = (connected: boolean) => {
       setWsConnected(connected);
-      // 注意：这里不再使用静态 notification，而是在组件内部处理
       console.log('WebSocket connection status:', connected ? 'connected' : 'disconnected');
     };
 
@@ -72,48 +66,126 @@ const App: React.FC = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  // ProLayout 菜单配置
+  const menuItems = [
+    {
+      key: '/dashboard',
+      icon: '📊',
+      label: '仪表板',
+    },
+    {
+      key: '/market',
+      icon: '📈',
+      label: '市场数据',
+    },
+    {
+      key: '/strategy',
+      icon: '🤖',
+      label: '策略管理',
+    },
+    {
+      key: '/backtest',
+      icon: '📋',
+      label: '回测分析',
+    },
+    {
+      key: '/trading',
+      icon: '💰',
+      label: '实盘交易',
+    },
+    {
+      key: '/settings',
+      icon: '⚙️',
+      label: '系统设置',
+    },
+  ];
+
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider theme={themeConfig}>
         <AntdApp>
           <Router>
-            <Layout style={{ minHeight: '100vh' }}>
-              {/* 侧边栏 */}
-              <Sidebar 
-                collapsed={collapsed} 
-                theme={isDarkMode ? 'dark' : 'light'}
-              />
-              
-              <Layout>
-                {/* 顶部导航 */}
-                <Header
-                  collapsed={collapsed}
-                  onCollapse={() => setCollapsed(!collapsed)}
-                  theme={isDarkMode ? 'dark' : 'light'}
-                  onThemeToggle={toggleTheme}
-                  isConnected={wsConnected}
-                />
-                
-                {/* 主内容区域 */}
-                <Content className="main-content">
-                  <Routes>
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                    <Route path="/dashboard" element={<DashboardPage />} />
-                    <Route path="/market" element={<MarketPage />} />
-                    <Route path="/strategy" element={<StrategyPage />} />
-                    <Route path="/backtest" element={<BacktestPage />} />
-                    <Route path="/trading" element={<TradingPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
-                  </Routes>
-                </Content>
-              </Layout>
-            </Layout>
+            <ProLayout
+              title="CryptoQuantBot"
+              logo="https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg"
+              collapsed={collapsed}
+              onCollapse={setCollapsed}
+              route={{
+                path: '/',
+                routes: menuItems,
+              }}
+              location={{
+                pathname: window.location.pathname,
+              }}
+              menuItemRender={(item, dom) => (
+                <a
+                  onClick={() => {
+                    window.history.pushState(null, '', item.path || '/');
+                    window.location.reload();
+                  }}
+                >
+                  {dom}
+                </a>
+              )}
+              headerContentRender={() => (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16,
+                  marginRight: 16
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8
+                  }}>
+                    <div
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        backgroundColor: wsConnected ? '#52c41a' : '#ff4d4f'
+                      }}
+                    />
+                    <span style={{ fontSize: 12 }}>
+                      {wsConnected ? '实时连接' : '离线模式'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={toggleTheme}
+                    style={{
+                      padding: '4px 8px',
+                      border: '1px solid #d9d9d9',
+                      borderRadius: 4,
+                      background: 'transparent',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {isDarkMode ? '🌞' : '🌙'}
+                  </button>
+                </div>
+              )}
+              fixSiderbar={true}
+              layout="side"
+              theme={isDarkMode ? 'dark' : 'light'}
+            >
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/market" element={<MarketPage />} />
+                <Route path="/strategy" element={<StrategyPage />} />
+                <Route path="/backtest" element={<BacktestPage />} />
+                <Route path="/trading" element={<TradingPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </ProLayout>
           </Router>
         </AntdApp>
       </ConfigProvider>
-      
+
       {/* React Query DevTools (仅在开发环境显示) */}
+      {/* @ts-ignore import.meta.env is not defined in the browser */}
       {import.meta.env.MODE === 'development' && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}

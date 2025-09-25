@@ -3,33 +3,21 @@
   min-height: 100vh;
 }
 
-.site-layout {
-  margin-left: 200px;
-  transition: margin-left 0.2s;
-}
-
-.site-layout.collapsed {
-  margin-left: 80px;
-}
-
-.site-layout-content {
+/* ProLayout 主内容区域样式 */
+.ant-pro-layout-content {
   padding: 16px;
   background: #f0f2f5;
   min-height: calc(100vh - 64px);
 }
 
 /* 暗色主题下的背景 */
-[data-theme='dark'] .site-layout-content {
+[data-theme='dark'] .ant-pro-layout-content {
   background: #141414;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .site-layout {
-    margin-left: 0;
-  }
-  
-  .site-layout-content {
+  .ant-pro-layout-content {
     padding: 8px;
   }
 }
@@ -52,14 +40,45 @@
   color: #ff4d4f;
 }
 
-/* 卡片样式 */
+/* 卡片样式 - 统一高度 */
 .dashboard-card {
   margin-bottom: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 200px; /* 统一最小高度 */
+  display: flex;
+  flex-direction: column;
 }
 
 [data-theme='dark'] .dashboard-card {
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* 确保卡片内容区域填充剩余空间 */
+.dashboard-card .ant-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 统计卡片特殊处理 */
+.dashboard-card .ant-statistic {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 市场数据卡片统一高度 */
+.market-card {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.market-card .ant-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 图表容器 */
@@ -201,18 +220,18 @@
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .toolbar-left,
   .toolbar-right {
     width: 100%;
     justify-content: center;
   }
-  
+
   .chart-container {
     height: 300px;
     padding: 8px;
   }
-  
+
   .statistic-value {
     font-size: 18px;
   }
